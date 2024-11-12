@@ -1,0 +1,147 @@
+paths: 
+  /api/users:
+    get:
+      summary: obtenemos los usuarios
+      tags: 
+        - Users
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: creamos un usuario
+      tags: 
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/requestBodies/createUser'
+      responses:
+        "200":
+          description: usuario creado
+        "500":
+          description: Internal Server Error creating user
+  /api/users/{uid}:
+    get:
+      summary: obtenemos colo un usuario por id
+      tags: 
+        - Users
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          description: id del usuario que se quiere buscar
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "500":
+          description: Internal Server Error
+  put: 
+    summary: actualizamos un usuario
+    tags: 
+      - Users
+    parameters:
+      - in: path
+        name: uid
+        required: true
+        description: id del usuario que se quiere buscar
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/requestBodies/createUser'
+    responses:
+      "200":
+        description: usuario actualizado correctamente
+      "404":
+        description: usuario no encontrado
+      "500":
+        description: Internal Server Error     
+                  
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id del usuario
+        first_Name: 
+          type: string
+          description: nombre del usuario
+        last_Name:
+          type: string
+          description: apellido del usuario
+          password:
+            type: string
+            description: password del usuario
+      example:
+        _id: ObjectId("123456")
+        first_Name: John
+        last_Name: Doe
+        password: 1234 
+  requestBodies:
+    createUser:
+      type: object
+      properties:
+        first_Name: 
+          type: string
+          description: nombre del usuario
+        last_Name:
+          type: string
+          description: apellido del usuario
+          password:
+            type: string
+            description: password del usuario
+          email:
+            type: string
+            description: email del usuario
+      example:
+        _id: ObjectId("123456")
+        first_Name: John3
+        last_Name: Doe3
+        password: 1234 
+        email: JohnDoe3@example.com
+  updateUser:
+      type: object
+      properties:
+        first_Name: 
+          type: string
+          description: nombre del usuario
+        last_Name:
+          type: string
+          description: apellido del usuario
+          password:
+            type: string
+            description: password del usuario
+          email:
+            type: string
+            description: email del usuario
+      example:
+        _id: ObjectId("123456")
+        first_Name: John3
+        last_Name: Doe3
+        password: 1234 
+        email: JohnDoe3@example.com
+        
