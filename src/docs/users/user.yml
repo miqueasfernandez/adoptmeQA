@@ -1,147 +1,143 @@
-paths: 
+paths:
   /api/users:
     get:
-      summary: obtenemos los usuarios
-      tags: 
+      summary: Obtenemos todos los usuarios de la BD
+      tags:
         - Users
-      responses:
+      responses: 
         "200":
-          description: OK
-        "500":
-          description: Internal Server Error
+          description: Obtienen todos los usuarios correctamente
           content:
             application/json:
-              schema:
+              schema: 
                 type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                items: 
+                  $ref: "#components/schemas/User"
+        "500":
+          description: Error interno del servidor, no se pudo obtener los usuarios
     post:
-      summary: creamos un usuario
-      tags: 
+      summary: Este endpoint crea un usuario
+      tags:
         - Users
       requestBody:
+        required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/requestBodies/createUser'
-      responses:
-        "200":
-          description: usuario creado
-        "500":
-          description: Internal Server Error creating user
+            schema: 
+              $ref: "#components/requestBodies/createUser"
+      responses: 
+        "201":
+          description: Usuario creado correctamente
+        "500": 
+          description: Error interno del servidor, no se pudo crear el usuario
   /api/users/{uid}:
     get:
-      summary: obtenemos colo un usuario por id
+      summary: Obtenemos un solo usuario por ID
       tags: 
         - Users
       parameters:
-        - in: path
-          name: uid
-          required: true
-          description: id del usuario que se quiere buscar
-          schema:
-            type: string
-
-      responses:
-        "200":
-          description: usuario encontrado
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        "500":
-          description: Internal Server Error
-  put: 
-    summary: actualizamos un usuario
-    tags: 
-      - Users
-    parameters:
-      - in: path
-        name: uid
+      - name: uid
+        in: path
         required: true
         description: id del usuario que se quiere buscar
-        schema:
+        schema: 
           type: string
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/requestBodies/createUser'
-    responses:
-      "200":
-        description: usuario actualizado correctamente
-      "404":
-        description: usuario no encontrado
-      "500":
-        description: Internal Server Error     
-                  
+      responses: 
+        "200":
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: "#components/schemas/User"
+        "500": 
+          description: Error interno del servidor, no se pudo obtener el usuario
+    put: 
+      summary: Actualizamos usuario por ID
+      tags: 
+        - Users
+      parameters: 
+      - name: uid
+        in: path
+        required: true
+        description: id del usuario que se quiere actualizar
+        schema: 
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: "#components/requestBodies/updateUser"
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+        "404": 
+          description: Usuario no encontrado
+        "500": 
+          description: Error interno del servidor, no se pudo actualizar el usuario
 
-components:
+components: 
   schemas:
     User:
       type: object
       properties:
-        _id:
+        _id: 
           type: ObjectId
-          description: id del usuario
-        first_Name: 
+          description: Id autogenerado por MongoDB
+        first_name: 
           type: string
-          description: nombre del usuario
-        last_Name:
+          description: Nombre del usuario
+        last_name: 
           type: string
-          description: apellido del usuario
-          password:
-            type: string
-            description: password del usuario
+          description: Apellido del usuario
+        password: 
+          type: string
+          description: Password del usuario
       example:
         _id: ObjectId("123456")
-        first_Name: John
-        last_Name: Doe
-        password: 1234 
+        first_name: John
+        last_name:  Doe
+        password: 1234
   requestBodies:
-    createUser:
+    createUser: 
       type: object
       properties:
-        first_Name: 
+        first_name: 
           type: string
-          description: nombre del usuario
-        last_Name:
+          description: Nombre del usuario
+        last_name: 
           type: string
-          description: apellido del usuario
-          password:
-            type: string
-            description: password del usuario
-          email:
-            type: string
-            description: email del usuario
+          description: Apellido del usuario
+        password: 
+          type: string
+          description: Password del usuario
+        email: 
+          type: string
+          description: Email del usuario
       example:
-        _id: ObjectId("123456")
-        first_Name: John3
-        last_Name: Doe3
-        password: 1234 
-        email: JohnDoe3@example.com
-  updateUser:
+        first_name: john
+        last_name: doe
+        password: 1234
+        email: jhondue@arcanoe.com
+    updateUser:
       type: object
       properties:
-        first_Name: 
+        first_name: 
           type: string
-          description: nombre del usuario
-        last_Name:
+          description: Nombre del usuario
+        last_name: 
           type: string
-          description: apellido del usuario
-          password:
-            type: string
-            description: password del usuario
-          email:
-            type: string
-            description: email del usuario
+          description: Apellido del usuario
+        password: 
+          type: string
+          description: Password del usuario
+        email: 
+          type: string
+          description: Email del usuario
       example:
-        _id: ObjectId("123456")
-        first_Name: John3
-        last_Name: Doe3
-        password: 1234 
-        email: JohnDoe3@example.com
-        
+        first_name: john
+        last_name: doe
+        password: 1234
+        email: jhondue@arcanoe.com

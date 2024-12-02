@@ -19,6 +19,7 @@ const updatePet = async(req,res) =>{
     const petUpdateBody = req.body;
     const petId = req.params.pid;
     const result = await petsService.update(petId,petUpdateBody);
+    result.save();
     res.send({status:"success",message:"pet updated"})
 }
 

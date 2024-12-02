@@ -8,12 +8,53 @@ import petsRouter from './routes/pets.router.js';
 import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mock.router.js';
+import dotenv from 'dotenv';
+import configObject from "./config/config.js";
+const {MONGO_URL, PORT} = configObject; 
+mongoose.set('strictQuery', true);
 
-//importamos el nuevo router de mocks
-//import mocksRouter from './routes/mocks.router.js';
+
+/*dotenv.config({
+    path: mode === "desarrollo" ? "./.env.desarrollo" : "./.env.produccion"
+});
+console.log("MONGO_URL desde config.js:", process.env.MONGO_URL);
+
+*/
+
+//si no estoy trabajando con distintos entornos de desarrollo, solo debo poner el path de .env.desarrollo
+
+
+
+// Configuración de Express y Mongoose
 const app = express();
-const PORT = process.env.PORT||3000;
-const connection = mongoose.connect(process.env.MONGO_URL);
+
+
+if (process.env.NODE_ENV !== 'test') {
+// Solo en producción o desarrollo, no en pruebas
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
+
+}
+dotenv.config({
+  mode : process.env.NODE_ENV,
+  
+  path: './.env.desarrollo'? "./.env.desarrollo" : "./.env.produccion"
+  
+});
+
+
+
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log('Conectado a la base de datos');
+  })
+  .catch((error) => {
+    console.error('Error de conexión:', error);
+  });
+
+console.log("MONGO_URL:", process.env.MONGO_URL);
+console.log("PORT:", process.env.PORT);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -39,7 +80,8 @@ const swaggerOption ={
         openapi:"3.0.1",
         info:{
             title:"Platilla de documentación",
-            description: "app para encontrar dueño alos perritos y gatitos"
+            description: "app para encontrar dueño alos perritos y gatitos",
+            version: "1.0.0"
 
         }
     },
@@ -48,12 +90,16 @@ const swaggerOption ={
 
 //3) conectamos swagger a nuestro sv de express
 
-const specs = swaggerJSDoc(swaggerOption);
-app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+console.log("Swagger Options:", swaggerOption);
 
-//TESTING DE INTEnacion
+const specs = swaggerJSDoc(swaggerOption);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+
+//TESTING DE INTEgracion
 
 //supertest: es una libreria que me permite realizar puruebas de integracion con diferentes peticiones http
 
 //instalamos supertest: npm i supertest -D
 
+
+export default app
