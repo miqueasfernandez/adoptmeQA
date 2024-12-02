@@ -9,8 +9,8 @@ import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mock.router.js';
 import dotenv from 'dotenv';
-import configObject from "./config/config.js";
-const {MONGO_URL, PORT} = configObject; 
+//import configObject from "./config/config.js";
+//const {MONGO_URL, PORT} = configObject; 
 mongoose.set('strictQuery', true);
 
 
@@ -27,7 +27,7 @@ console.log("MONGO_URL desde config.js:", process.env.MONGO_URL);
 
 // Configuración de Express y Mongoose
 const app = express();
-
+const PORT =  3030;
 
 if (process.env.NODE_ENV !== 'test') {
 // Solo en producción o desarrollo, no en pruebas
@@ -65,7 +65,7 @@ app.use('/api/adoptions',adoptionsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use('/api/mocks',mocksRouter);
 
-app.listen(PORT,()=>console.log(`Listening on ${PORT}`))
+
 
 //SWAGGER: libreria que me permite documentar la app
 //SWAGGERjsdoc: nos deja escribir la config de un archivo .yaml tambien json y genera un apidoc
